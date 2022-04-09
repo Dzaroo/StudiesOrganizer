@@ -1,0 +1,114 @@
+﻿<Page x:Class="StudiesOrganizer.Views.SubjectsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ViewModel="clr-namespace:StudiesOrganizer.ViewModels"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SubjectsView"
+      DataContext="{Binding Source={StaticResource Locator}, Path=SubjectsViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid Grid.Row="0"
+                  ItemsSource="{Binding Subjects}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True"
+                  FontSize="14"
+                  HeadersVisibility="Column"
+                  BorderThickness="0"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedSubject}">
+
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="Background" Value="LightGray"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Padding" Value="12 6 12 6"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Gray" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="10 5 10 5"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Gray" />
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Nazwa"
+                                    Binding="{Binding Name}"/>
+
+                <DataGridTextColumn Header="Imię i nazwisko powadzącego"
+                                    Binding="{Binding LecturerFullName}"/>
+
+                <DataGridTextColumn Header="Semestr"
+                                    Binding="{Binding StudySemester}"/>
+
+                <DataGridTemplateColumn Header="Przypisani studenci">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ListView ItemsSource="{Binding StudentSubjects}"
+                                      DisplayMemberPath="Student.FullName"
+                                      IsEnabled="False"
+                                      BorderThickness="0">
+                                
+                            </ListView>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <Grid Grid.Row="1"
+              Background="LightGray">
+
+            <Grid.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource AppButtonStyle}">
+                    <Setter Property="Height" Value="50"/>
+                    <Setter Property="Width" Value="80"/>
+                    <Setter Property="Margin" Value="0 10 10 10"/>
+                </Style>
+            </Grid.Resources>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="DODAJ" 
+                    Grid.Column="2"
+                    ToolTip="Zarejestruj nowego studenta"
+                    Command="{Binding GoToAddSubjectWindowCommand}"/>
+            <Button Grid.Column="1"
+                    ToolTip="Przypisz wybranych studentów do przedmiotu"
+                    Command="{Binding GoToAddStudentsToSubjectWindowCommand}">
+                <TextBlock Text="PRZYPISZ STUDENTÓW" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
+
+        </Grid>
+
+    </Grid>
+</Page>
